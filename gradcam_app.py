@@ -14,6 +14,7 @@ import numpy as np
 import cv2
 import os
 import random
+from io import BytesIO
 
 # shows the app's title at the top of the page
 st.title("Do You See What AI Thinks Is Important?")
@@ -260,8 +261,13 @@ canvas_height = int(canvas_width * img.height / img.width)
 
 img_rgb = img.convert("RGB")
 
+buffer = BytesIO()
+img_rgb.save(buffer, format="PNG")
+buffer.seek(0)
+frontend_safe_img = Image.open(buffer)
+
 # overlay the drawing on the image (highlight is in red)
-canvas_result = st_canvas(fill_color="rgba(255,0,0,0.3)", stroke_width=stroke_width, stroke_color="red", background_image=img_rgb, update_streamlit=True, height=canvas_height, width=canvas_width, drawing_mode="freedraw", key="canvas",)
+canvas_result = st_canvas(fill_color="rgba(255,0,0,0.3)", stroke_width=stroke_width, stroke_color="red", background_image=frontend_safe_img, update_streamlit=True, height=canvas_height, width=canvas_width, drawing_mode="freedraw", key="canvas",)
 
 # once mask is drawn, convert it to a binary mask
 if canvas_result.image_data is not None:
