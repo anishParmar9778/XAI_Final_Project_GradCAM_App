@@ -258,8 +258,10 @@ max_width = 800
 canvas_width = min(max_width, img.width)
 canvas_height = int(canvas_width * img.height / img.width)
 
+img_np = np.array(img).astype(np.uint8)
+
 # overlay the drawing on the image (highlight is in red)
-canvas_result = st_canvas(fill_color="rgba(255,0,0,0.3)", stroke_width=stroke_width, stroke_color="red", background_image=img, update_streamlit=True, height=canvas_height, width=canvas_width, drawing_mode="freedraw", key="canvas",)
+canvas_result = st_canvas(fill_color="rgba(255,0,0,0.3)", stroke_width=stroke_width, stroke_color="red", background_image=Image.fromarray(img_np), update_streamlit=True, height=canvas_height, width=canvas_width, drawing_mode="freedraw", key="canvas",)
 
 # once mask is drawn, convert it to a binary mask
 if canvas_result.image_data is not None:
